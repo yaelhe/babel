@@ -30,9 +30,10 @@ function flatten(array) {
   return flattened;
 }
 
-function hasEarlyError(src) {
+function shouldExpectError(src) {
   return !!(
-    src.match(/^\s*negative:\s*$/m) && src.match(/^\s+phase:\s*early\s*$/m)
+    src.match(/^\s*negative:\s*$/m) &&
+    src.match(/^\s+phase:\s*(early|parse)\s*$/m)
   );
 }
 
@@ -71,7 +72,7 @@ function makeScenarios(fileName, testContent) {
   const base = {
     fileName: fileName,
     isModule: modulePattern.test(testContent),
-    expectedError: hasEarlyError(testContent),
+    expectedError: shouldExpectError(testContent),
   };
   const isNoStrict = noStrictPattern.test(testContent);
   const isOnlyStrict = onlyStrictPattern.test(testContent);
